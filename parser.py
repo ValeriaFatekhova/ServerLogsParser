@@ -38,6 +38,7 @@ def log_parser(log_file_path):
         string = f.readline()
         while string != "":
             request = string_parser(string)
+            print(request["data"])
             num_requests += 1  # считаем общее число запросов
 
             # формируем словарь, где ключи - хосты, а значения - чилсо обращений к хосту-ключу
