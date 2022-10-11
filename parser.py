@@ -1,6 +1,7 @@
 import json
 import os
 import re
+from pprint import pprint
 
 
 def string_parser(string):
@@ -80,20 +81,28 @@ def log_parser(log_file_path):
 
 
 def print_json(data):
-    print(data)
+    """Печатает словарь"""
+    pprint(data)
 
 
 def save_to_file(data, file_path):
+    """Пишет словарь в файл как джейсон объект"""
     with open(file_path, "w") as f:
         f.write(json.dumps(data, indent=4))
 
 
-path = input("Введите путь к логфайлу или каталогу с логфайлами: ")
+if __name__ == "__main__":
+    path = input("Введите путь к логфайлу или каталогу с логфайлами: ")
+    path = path.split()
 
-data = log_parser(path)
-save_to_file(data, r"C:\Users\ruvkuminov\TestsAutomation\ServerLogsParser\server_logs\1.json")
-print_json(data)
+    if len(path) == 1:
+        data = log_parser(path[0])
+        save_to_file(data, path[0].split(".")[0]+".json")
+        print_json(data)
 
-# for file in os.listdir(path):
-#     print(os.path.join(path, file))
-#     print_json(log_parser(os.path.join(path, file)))
+    if len(path) == 2 and path[1] == "--all":
+        for file in os.listdir(path[0]):
+            print(os.path.join(path[0], file))
+            data = log_parser(os.path.join(path[0], file))
+            save_to_file(data, os.path.join(path[0], file.split(".")[0]+".json"))
+            print_json(data)
